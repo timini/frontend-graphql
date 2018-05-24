@@ -16,10 +16,61 @@ const Reward = ({ id, name, image, description, points, quantity, capPerAmbassad
   </div>
 )
 
-const Rewards = ({ allRewards = [], dispatch, filters = {} }) => {
-  const { page, campaign_id, ...allowedFilters } = filters;
-  const points = uniq(allRewards.map(reward => reward.points)).sort((a, b) => a - b);
-  console.log(points)
+const Filter = ({ name, dispatch, allRewards = [] }) => {
+  const range = uniq(allRewards.map(reward => reward[name])).sort((a, b) => a - b)
+  return (<div>
+    <h5>By {name}:</h5>
+    <h6>less than</h6>
+    <ul>
+      {range.map(point => (<li
+          type="checkbox"
+          key={point}
+          onClick={
+            () => dispatch({
+              type: 'SET_FILTER',
+              payload: {
+                filterName: `${name}_lte`,
+                value: point,
+              }
+            })
+          }
+        >
+          {point}
+        </li>)
+      )}
+    </ul>
+    <h6>greater than</h6>
+    <ul>
+      {range.map(point => (<li
+          type="checkbox"
+          key={point}
+          onClick={
+            () => dispatch({
+              type: 'SET_FILTER',
+              payload: {
+                filterName: `${name}_gte`,
+                value: point,
+              }
+            })
+          }
+        >
+          {point}
+        </li>)
+      )}
+    </ul>
+  </div>);
+};
+
+const Rewards = (props) => {
+  const {
+    allRewards = [],
+    dispatch,
+    filters: {
+      page,
+      campaign_id,
+      ...allowedFilters
+    } = {}
+  } = props;
   return (<div>
     <h1>Rewards</h1>
     <div>
@@ -29,7 +80,7 @@ const Rewards = ({ allRewards = [], dispatch, filters = {} }) => {
         {Object.entries(allowedFilters).map(entry => {
           const [ key, val ] = entry;
           if (not(isNil(val))) {
-            return <div
+            return <div key={key}
               onClick={
                 () => dispatch({
                   type: 'SET_FILTER',
@@ -44,26 +95,9 @@ const Rewards = ({ allRewards = [], dispatch, filters = {} }) => {
           return null;
         })}
       </div>
-      <h5>By points:</h5>
-      <h6>less than</h6>
-      <ul>
-        {points.map(point => (<li
-            type="checkbox"
-            key={point}
-            onClick={
-              () => dispatch({
-                type: 'SET_FILTER',
-                payload: {
-                  filterName: 'points_lte',
-                  value: point,
-                }
-              })
-            }
-          >
-            {point}
-          </li>)
-        )}
-      </ul>
+      <Filter name="points" {...props} />
+      <Filter name="quantity" {...props} />
+      <Filter name="capPerAmbassador" {...props} />
     </div>
     <div>
       {allRewards.map(reward => <Reward {...reward}/>)}
