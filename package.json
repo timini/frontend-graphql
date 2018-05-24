@@ -43,6 +43,7 @@
     "json-graphql-server": "^2.1.1",
     "lodash.omit": "^4.5.0",
     "mustache-express": "^1.2.5",
+    "ramda": "^0.25.0",
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
     "react-dom": "^16.2.0",

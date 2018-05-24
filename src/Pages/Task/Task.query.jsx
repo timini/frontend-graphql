@@ -25,14 +25,16 @@ export default graphql(
     `,
     {
         options: ({
-          page,
-          campaign_id,
-          capPerAmbassador_lte,
-          capPerAmbassador_gte,
-          quantity_lte,
-          quantity_gte,
-          points_lte,
-          points_gte,
+          filters: {
+            page,
+            campaign_id,
+            capPerAmbassador_lte,
+            capPerAmbassador_gte,
+            quantity_lte,
+            quantity_gte,
+            points_lte,
+            points_gte,
+          }
         }) => ({
           variables: {
             page,
@@ -45,6 +47,6 @@ export default graphql(
             points_gte,
           }
         }),
-        props: ({ data = {} }) => ({ allRewards: data.allRewards || [] }),
+        props: ({ data = {}, ownProps: { filters = {} }}) => ({ allRewards: data.allRewards || [], filters }),
     },
 );

@@ -15,28 +15,7 @@ const store = createStore(
 
 const GQLComp = compose(TaskQuery)(Task);
 
-
-const mapStateToProps = ({ filters: {
-  page,
-  campaign_id,
-  capPerAmbassador_lte,
-  capPerAmbassador_gte,
-  quantity_lte,
-  quantity_gte,
-  points_lte,
-  points_gte,
-}}) => ({
-  page,
-  campaign_id,
-  capPerAmbassador_lte,
-  capPerAmbassador_gte,
-  quantity_lte,
-  quantity_gte,
-  points_lte,
-  points_gte,
-})
-
-const ConnectedQuery = connect(mapStateToProps)(GQLComp)
+const ConnectedQuery = connect(state => state)(GQLComp)
 
 const TaskIndex = () => (
   <Provider store={store}>
